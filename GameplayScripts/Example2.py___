@@ -1,0 +1,139 @@
+from winstealer import *
+from evade import checkEvade
+from commons.items import *
+from commons.skills import *
+from commons.utils import *
+from commons.targeting import *
+
+winstealer_script_info = {
+    "script": "Example",
+    "author": "WS+ Champ",
+    "description": "your champ",
+}
+
+Settings = {
+    "keys": {
+        "lasthit_key": 45,
+        "harass_key": 46,
+        "key_orbwalk": 57,
+        "laneclear_key": 47,
+    },
+    "combo": {
+        "use_q_in_combo": True,
+        "use_w_in_combo": True,
+        "use_e_in_combo": True,
+        "use_r_in_combo": True,
+    },
+    "evade": {
+        "use_q_on_evade": False,
+        "use_w_on_evade": False,
+        "use_e_on_evade": False,
+        "use_r_on_evade": False,
+    },
+    "ks": {
+        "steal_kill_with_q": False,
+        "steal_kill_with_w": False,
+        "steal_kill_with_e": False,
+        "steal_kill_with_r": False,
+    },
+    "laneclear": {
+        "lane_clear_with_q": False,
+        "lane_clear_with_w": False,
+        "lane_clear_with_e": False,
+        "lane_clear_with_r": False,
+    },
+    "drawings": {
+        "draw_q_range": False,
+        "draw_w_range": False,
+        "draw_e_range": False,
+        "draw_r_range": False,
+    },
+}
+
+
+def winstealer_load_cfg(cfg):
+    global Settings
+
+    ## Keys
+    Settings["keys"]["lasthit_key"] = cfg.get_int("lasthit_key", 46)
+    Settings["keys"]["harass_key"] = cfg.get_int("harass_key", 45)
+    Settings["keys"]["key_orbwalk"] = cfg.get_int("key_orbwalk", 57)
+    Settings["keys"]["laneclear_key"] = cfg.get_int("laneclear_key", 47)
+
+    ## Combo
+    Settings["combo"]["use_q_in_combo"] = cfg.get_bool("use_q_in_combo", True)
+    Settings["combo"]["use_w_in_combo"] = cfg.get_bool("use_w_in_combo", True)
+    Settings["combo"]["use_e_in_combo"] = cfg.get_bool("use_e_in_combo", True)
+    Settings["combo"]["use_r_in_combo"] = cfg.get_bool("use_r_in_combo", True)
+
+    ## Evade
+    Settings["evade"]["use_q_on_evade"] = cfg.get_bool("use_q_on_evade", True)
+    Settings["evade"]["use_q_on_evade"] = cfg.get_bool("use_w_on_evade", True)
+    Settings["evade"]["use_q_on_evade"] = cfg.get_bool("use_e_on_evade", True)
+    Settings["evade"]["use_q_on_evade"] = cfg.get_bool("use_r_on_evade", True)
+
+    ## KS
+    Settings["ks"]["steal_kill_with_q"] = cfg.get_bool("steal_kill_with_q", False)
+    Settings["ks"]["steal_kill_with_w"] = cfg.get_bool("steal_kill_with_w", False)
+    Settings["ks"]["steal_kill_with_e"] = cfg.get_bool("steal_kill_with_e", False)
+    Settings["ks"]["steal_kill_with_r"] = cfg.get_bool("steal_kill_with_r", False)
+
+    ## Laneclear
+    Settings["laneclear"]["lane_clear_with_q"] = cfg.get_bool(
+        "lane_clear_with_q", False
+    )
+    Settings["laneclear"]["lane_clear_with_w"] = cfg.get_bool(
+        "lane_clear_with_w", False
+    )
+    Settings["laneclear"]["lane_clear_with_e"] = cfg.get_bool(
+        "lane_clear_with_e", False
+    )
+    Settings["laneclear"]["lane_clear_with_r"] = cfg.get_bool(
+        "lane_clear_with_r", False
+    )
+
+    ## Drawings
+    Settings["drawings"]["draw_q_range"] = cfg.get_bool("draw_q_range", False)
+    Settings["drawings"]["draw_w_range"] = cfg.get_bool("draw_w_range", False)
+    Settings["drawings"]["draw_e_range"] = cfg.get_bool("draw_e_range", False)
+    Settings["drawings"]["draw_r_range"] = cfg.get_bool("draw_r_range", False)
+
+
+def winstealer_save_cfg(cfg):
+    global Settings
+    ## Keys
+
+    cfg.set_int("lasthit_key", Settings["keys"]["lasthit_key"])
+    cfg.set_int("harass_key", Settings["keys"]["harass_key"])
+    cfg.set_int("laneclear_key", Settings["keys"]["laneclear_key"])
+    cfg.set_int("key_orbwalk", Settings["keys"]["key_orbwalk"])
+
+    ## Combo
+    cfg.set_bool("use_q_in_combo", Settings["combo"]["use_q_in_combo"])
+    cfg.set_bool("use_w_in_combo", Settings["combo"]["use_w_in_combo"])
+    cfg.set_bool("use_e_in_combo", Settings["combo"]["use_e_in_combo"])
+    cfg.set_bool("use_r_in_combo", Settings["combo"]["use_r_in_combo"])
+
+    ## Evade
+    cfg.set_bool("use_q_on_evade", Settings["evade"]["use_q_on_evade"])
+    cfg.set_bool("use_w_on_evade", Settings["evade"]["use_w_on_evade"])
+    cfg.set_bool("use_e_on_evade", Settings["evade"]["use_e_on_evade"])
+    cfg.set_bool("use_r_on_evade", Settings["evade"]["use_r_on_evade"])
+
+    ## KS
+    cfg.set_bool("steal_kill_with_q", Settings["ks"]["steal_kill_with_q"])
+    cfg.set_bool("steal_kill_with_w", Settings["ks"]["steal_kill_with_w"])
+    cfg.set_bool("steal_kill_with_e", Settings["ks"]["steal_kill_with_e"])
+    cfg.set_bool("steal_kill_with_r", Settings["ks"]["steal_kill_with_r"])
+
+    ## Laneclear
+    cfg.set_bool("lane_clear_with_q", Settings["laneclear"]["lane_clear_with_q"])
+    cfg.set_bool("lane_clear_with_w", Settings["laneclear"]["lane_clear_with_w"])
+    cfg.set_bool("lane_clear_with_e", Settings["laneclear"]["lane_clear_with_e"])
+    cfg.set_bool("lane_clear_with_r", Settings["laneclear"]["lane_clear_with_r"])
+
+    ## Drawings
+    cfg.set_bool("draw_q_range", Settings["drawings"]["draw_q_range"])
+    cfg.set_bool("draw_w_range", Settings["drawings"]["draw_e_range"])
+    cfg.set_bool("draw_e_range", Settings["drawings"]["draw_w_range"])
+    cfg.set_bool("draw_r_range", Settings["drawings"]["draw_r_range"])
